@@ -1,8 +1,21 @@
 import logo from './logo.svg';
 import './App.css';
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from 'recoil';
+
+const noteListState = atom({
+  key: 'noteListState', // unique ID (with respect to other atoms/selectors)
+  default: [], // default value (aka initial value)
+});
 
 function App() {
   return (
+    <RecoilRoot>
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
@@ -19,6 +32,7 @@ function App() {
         </a>
       </header>
     </div>
+    </RecoilRoot>
   );
 }
 
