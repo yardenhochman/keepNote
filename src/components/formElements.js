@@ -3,7 +3,6 @@ import { useForm, FormProvider, useFormContext } from "react-hook-form";
 import styled from 'styled-components';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 
-
 export const Form = ({ children, onSubmit, ...props }) => {
   const methods = useForm();
 
