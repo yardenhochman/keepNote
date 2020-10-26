@@ -9,19 +9,19 @@ const NotesList = ({ noteList }) => {
   return (
     <ListOfNotes>
       {noteList.map(note=>(
-        <Card key={note.content+note.date} variant="outlined">
-          <FooterArea>
+        <NoteCard key={note.content+note.date} variant="outlined">
+          <ActionArea>
             <IconButton icon={<EditIcon />} actionText='Edit'/>
             <IconButton icon={<DeleteIcon />} actionText='delete'/>
-          </FooterArea>
+          </ActionArea>
           <Content>
             <NoteText>{note.content}</NoteText>
           </Content>
-        <Header>
+        <InfoArea>
           <Author>{note.author}</Author>
           <DateText>{dateDisplay(note.date)}</DateText>
-        </Header>
-        </Card>
+        </InfoArea>
+        </NoteCard>
       ))}
     </ListOfNotes>
   )
@@ -36,7 +36,7 @@ const ListOfNotes = styled.ul`
   width: 100vw;
   padding: 0 10px;
 `
-const Card = styled.div`
+const NoteCard = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 4px;
   color: rgba(0, 0, 0, 0.87);
@@ -44,7 +44,7 @@ const Card = styled.div`
   background-color: #fff;
   width: 300px;
 `
-const Header = styled.div`
+const InfoArea = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 16px;
@@ -63,7 +63,7 @@ const Content = styled.div`
   padding: 0 16px;
 `
 
-const FooterArea = styled.div`
+const ActionArea = styled.div`
   display: flex;
   justify-content: flex-end;
 `
