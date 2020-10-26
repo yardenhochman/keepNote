@@ -6,6 +6,7 @@ import { dateDisplay } from '../utils/dateUtils';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import { selectedNote, openModal, getNoteListById, noteListState } from '../state'
 import TruncateTooltip from './truncateTooltip'
+import { sortByDate } from '../utils/dateUtils'
 
 const NotesList = () => {
   const setSelectedNote = useRecoilState(selectedNote)[1];
@@ -22,17 +23,18 @@ const NotesList = () => {
   const deleteNote = note => e => {
     e.preventDefault()
     e.stopPropagation()
-    const noteIndex = noteListById[note.id]?.index
-    if (noteIndex) {
+    const noteIndex = noteListById[note.id]?.index ?? false
+    if (noteIndex !== false) {
       const newNoteList = [...noteList]
       newNoteList.splice(noteIndex,1)
       setNoteList(newNoteList)
     }
   }
+  const newNoteList = [...noteList]
 
   return (
     <ListOfNotes>
-      {noteList.map(note=>(
+      {newNoteList.sort(sortByDate).map(note=>(
         <NoteCard key={note.content+note.date} variant="outlined" onClick={onNoteClick(note)}>
           <ActionArea>
             <IconButton icon={<DeleteIcon />} actionText='delete' onClick={deleteNote(note)}/>

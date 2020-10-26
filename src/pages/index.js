@@ -17,8 +17,6 @@ const useFillNotesFromStorage = () => {
     }
   },[setNoteList])
 }
-  
-
   const MainPage = () => {
     const noteList = useRecoilValue(noteListState);
     const setModalOpen = useRecoilState(openModal)[1];
