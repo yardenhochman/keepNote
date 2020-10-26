@@ -6,7 +6,15 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 
 
+export const selectedNote = atom({
+  key: 'selectedNote',
+  default: false
+})
 
+export const openModal = atom({
+  key: 'openModal',
+  default: false
+})
 
 const exampleNote = {
   author: 'Yarden Hochman', content: 'testing notes list', date: new Date(), id: uuidv4()
@@ -30,6 +38,17 @@ export const userName = selector({
   get: ({get}) => {
     const user = get(userState);
     return user?.name
+  }
+})
+
+export const getNoteListById = selector({
+  key: 'noteListById',
+  get: ({ get }) => {
+    const list = get(noteListState);
+    return list.reduce((acc,note,index) => {
+      acc[note.id] = {...note, index}
+      return acc;
+    },{})
   }
 })
 

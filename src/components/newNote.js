@@ -1,13 +1,18 @@
 import React from 'react'
 import styled from 'styled-components';
-import { Form, InputText } from './formElements';
+import { Form, InputText, Error } from './formElements';
 import Button from '@material-ui/core/Button';
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { noteListState, userName } from '../state'
+import { noteListState, userName, openModal, selectedNote, getNoteListById } from '../state'
 import { v4 as uuidv4 } from 'uuid';
 
-const NewNote = ({ onClose }) => {
+const NewNote = () => {
   const [noteList, setNoteList] = useRecoilState(noteListState);
+  const [noteId, setSelectedNote] = useRecoilState(selectedNote);
+  const setModalOpen = useRecoilState(openModal)[1];
+  
+  const noteListById = useRecoilValue(getNoteListById)
+  const currentNote = noteListById?.[noteId]
 
   const addNote = (note) => {
     const newNoteList = [...noteList]
@@ -17,13 +22,27 @@ const NewNote = ({ onClose }) => {
   const currentUserName = useRecoilValue(userName)
 
   const onSubmit = ({ content }) => {
-    addNote({ content, author: currentUserName, date: new Date(), id: uuidv4() });
-    onClose();
+    if (!noteId) {
+      addNote({ content, author: currentUserName, date: new Date(), id: uuidv4() });
+    } else {
+      const newNoteList = [...noteList]
+      newNoteList[currentNote.index] = { ...currentNote, content}
+      setNoteList(newNoteList)
+    }
+    setModalOpen(false);
   }
+
+  React.useEffect(()=>{
+    return ()=>{
+      setSelectedNote(false)
+    }
+  },[setSelectedNote])
+
   return (
-      <CardForm onSubmit={onSubmit}>
-        <InputText name='content' required/>
+      <CardForm onSubmit={onSubmit} defaultValues={currentNote}>
+        <InputText name='content' required />
         <SaveButton>Save</SaveButton>
+        <Error type='required' message='cannot save empty note' />
       </CardForm>
   )
 }
