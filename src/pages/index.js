@@ -47,5 +47,6 @@ const Page = styled.div`
   & > button {
     width: 300px;
   }
+  margin-top: 5px;
 `
 

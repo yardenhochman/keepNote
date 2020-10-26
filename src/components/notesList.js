@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { dateDisplay } from '../utils/dateUtils';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import { selectedNote, openModal, getNoteListById, noteListState } from '../state'
+import TruncateTooltip from './truncateTooltip'
 
 const NotesList = () => {
   const setSelectedNote = useRecoilState(selectedNote)[1];
@@ -37,7 +38,10 @@ const NotesList = () => {
             <IconButton icon={<DeleteIcon />} actionText='delete' onClick={deleteNote(note)}/>
           </ActionArea>
           <Content>
-            <NoteText>{note.content}</NoteText>
+            <TruncateTooltip lines={2} title={note.content}>
+              <NoteText >{note.content}</NoteText>
+            </TruncateTooltip>
+
           </Content>
         <InfoArea>
           <Author>{note.author}</Author>
@@ -57,8 +61,14 @@ const ListOfNotes = styled.ul`
   flex-direction: row;
   width: 100vw;
   padding: 0 10px;
-  max-height: 80vh;
+  max-height: calc(100vh - 75px);
   flex-wrap: wrap;
+  @media (max-width: 1023px) {
+    overflow: scroll;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
 `
 const NoteCard = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.12);

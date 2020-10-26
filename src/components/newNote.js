@@ -7,6 +7,9 @@ import { noteListState, userName, openModal, selectedNote, getNoteListById } fro
 import { v4 as uuidv4 } from 'uuid';
 
 const NewNote = () => {
+
+  const inputRef = React.useRef()
+
   const [noteList, setNoteList] = useRecoilState(noteListState);
   const [noteId, setSelectedNote] = useRecoilState(selectedNote);
   const setModalOpen = useRecoilState(openModal)[1];
@@ -33,6 +36,7 @@ const NewNote = () => {
   }
 
   React.useEffect(()=>{
+    inputRef.current?.focus()
     return ()=>{
       setSelectedNote(false)
     }
@@ -40,7 +44,7 @@ const NewNote = () => {
 
   return (
       <CardForm onSubmit={onSubmit} defaultValues={currentNote}>
-        <InputText name='content' required />
+        <InputText name='content' required autocomplete="off" innerRef={inputRef}/>
         <SaveButton>Save</SaveButton>
         <Error type='required' message='cannot save empty note' />
       </CardForm>

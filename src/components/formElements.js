@@ -18,10 +18,14 @@ export const Form = ({ children, onSubmit, defaultValues, ...props }) => {
   )
 }
 
-export const InputText = ({required, ...props}) => {
+export const InputText = ({required, innerRef, ...props}) => {
   const { register } = useFormContext()
 
-  return <OutlinedInput {...props} inputRef={register({ required })} />
+  return <OutlinedInput {...props} inputRef={e=>{
+    
+    register({ required })(e)
+    innerRef.current = e
+    }} />
 }
 
 
