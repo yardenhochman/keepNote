@@ -3,17 +3,30 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from './iconButton';
 import styled from 'styled-components';
 import { dateDisplay } from '../utils/dateUtils';
-import {useRecoilState} from 'recoil';
-import { selectedNote, openModal } from '../state'
+import {useRecoilState, useRecoilValue} from 'recoil';
+import { selectedNote, openModal, getNoteListById, noteListState } from '../state'
 
-const NotesList = ({ noteList }) => {
+const NotesList = () => {
   const setSelectedNote = useRecoilState(selectedNote)[1];
+  const [noteList, setNoteList] = useRecoilState(noteListState);
   const setModalOpen = useRecoilState(openModal)[1];
+  const noteListById = useRecoilValue(getNoteListById)
 
   const onNoteClick = note => e => {
     e.preventDefault()
     setSelectedNote(note.id)
     setModalOpen(true)
+  }
+  
+  const deleteNote = note => e => {
+    e.preventDefault()
+    e.stopPropagation()
+    const noteIndex = noteListById[note.id]?.index
+    if (noteIndex) {
+      const newNoteList = [...noteList]
+      newNoteList.splice(noteIndex,1)
+      setNoteList(newNoteList)
+    }
   }
 
   return (
@@ -21,7 +34,7 @@ const NotesList = ({ noteList }) => {
       {noteList.map(note=>(
         <NoteCard key={note.content+note.date} variant="outlined" onClick={onNoteClick(note)}>
           <ActionArea>
-            <IconButton icon={<DeleteIcon />} actionText='delete'/>
+            <IconButton icon={<DeleteIcon />} actionText='delete' onClick={deleteNote(note)}/>
           </ActionArea>
           <Content>
             <NoteText>{note.content}</NoteText>

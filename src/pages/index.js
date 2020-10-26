@@ -28,10 +28,10 @@ const useFillNotesFromStorage = () => {
 
   return (
     <Page>
-      <Button variant="outlined" onClick={()=>setModalOpen(true)}>new note</Button>
+      <Button variant="outlined" onClick={()=>setModalOpen(true)}>New Note</Button>
       <NotesList noteList={noteList} />
       <Modal>
-          <NewNote />
+        <NewNote />
       </Modal>
     </Page>
   )

@@ -7,7 +7,7 @@ function App() {
   return (
     <StylesProvider injectFirst>
       <RecoilRoot>
-      <MainPage />
+        <MainPage />
       </RecoilRoot>
     </StylesProvider>
   );
