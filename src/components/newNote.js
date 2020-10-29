@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components';
-import { Form, InputText, Error } from './formElements';
+import { Form, InputText } from './formElements';
 import Button from '@material-ui/core/Button';
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { noteListState, openModal, selectedNote, getNoteListById } from '../state'
@@ -42,13 +42,12 @@ const NewNote = () => {
 
   return (
       <CardForm onSubmit={onSubmit} defaultValues={currentNote}>
-        <InputText label='What would you like to say?' name='content' required autocomplete="off" innerRef={focusOnLoad}/>
-        <InputText label='Author Name' name='author' required autocomplete="off" />
+        <InputText label='What would you like to say?' name='content' required innerRef={focusOnLoad}/>
+        <InputText label='Author Name' name='author' required />
         <div>
           <CancelButton onClick={()=>setModalOpen(false)}>Cancel</CancelButton>
           <SaveButton>Save</SaveButton>
         </div>
-        <Error type='required' message='cannot save empty note' />
       </CardForm>
   )
 }

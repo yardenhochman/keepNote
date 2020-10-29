@@ -26,8 +26,8 @@ const NotesList = () => {
     e.stopPropagation()
     const noteIndex = noteListById[note.id]?.index ?? false
     if (noteIndex !== false) {
-      const newNoteList = 
-      [...noteList].splice(noteIndex,1)
+      const newNoteList = [...noteList]
+      newNoteList.splice(noteIndex,1)
       setNoteList(newNoteList)
     }
   }

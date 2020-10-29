@@ -1,7 +1,7 @@
 import React from 'react'
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { useFillNotesFromStorage } from '../utils/hooks'
-import { noteListState, userState, PersistenceObserver } from '../state'
+import { noteListState, userState, usePersistenceObserver } from '../state'
 import NotesList from '../components/notesList'
 import NewNote from '../components/newNote';
 import Modal from '../components/Modal'
@@ -14,7 +14,7 @@ import Button from '@material-ui/core/Button';
     const noteList = useRecoilValue(noteListState);
     const [user, setUser] = useRecoilState(userState)
 
-    PersistenceObserver()
+    usePersistenceObserver()
     useFillNotesFromStorage()
 
     if (!user?.name) return <Auth />

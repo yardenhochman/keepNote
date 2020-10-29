@@ -1,7 +1,8 @@
 import {
   atom,
   selector,
-  useRecoilTransactionObserver_UNSTABLE
+  useRecoilTransactionObserver_UNSTABLE,
+  useRecoilValue
 } from 'recoil';
 import { v4 as uuidv4 } from 'uuid';
 import { sortByDate } from './utils/dateUtils'
@@ -56,8 +57,11 @@ export const getSortedNoteList = selector({
 })
 
 
-export const PersistenceObserver = () => {
+export const usePersistenceObserver = () => {
+  const user = useRecoilValue(userState);
+  console.log(user?.id)
   useRecoilTransactionObserver_UNSTABLE(({snapshot}) => {
+
     for (const modifiedAtom of snapshot.getNodes_UNSTABLE({isModified: true})) {
       const atomLoadable = snapshot.getLoadable(modifiedAtom);
       if (atomLoadable.state === 'hasValue') {

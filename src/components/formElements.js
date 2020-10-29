@@ -21,22 +21,31 @@ export const Form = ({ children, onSubmit, defaultValues, ...props }) => {
 
 
 
-export const InputText = ({ required, innerRef, isLogin, skipVerification,...props }) => {
+export const InputText = ({ required, innerRef, isLogin, skipVerification = false,...props }) => {
   const { register, getValues } = useFormContext()
   if (props.type === 'password') {
     console.log(skipVerification)
   }
+
+
+
   return (
     <InputArea>
       <TextField
+      autocomplete="off"
       variant="outlined"  
       label={props.label ?? props.name}
         {...props} 
         inputRef={e=>{
           register({ 
             required: required ? `Please fill in the ${props.name} field` : null, 
-            validate: value => 
-            validation(getValues(), skipVerification)?.[props.name](value)
+            validate: value => {
+              const validationMethod = validation(getValues(), skipVerification)?.[props.name]
+            if (validationMethod) {
+              return validationMethod(value)
+            }
+              return null
+            }
             })(e)
           if (innerRef) {
             innerRef.current = e
@@ -79,9 +88,3 @@ export const Error = ({ name='content' }) => {
   
 
   }
-
-export const Errors = () => {
-  const { errors } = useFormContext()
-  console.log(errors)
-  return <ErrorMessage errors={errors} name="verify_password" render={({ message }) => <p>{message}</p>} />
-}
