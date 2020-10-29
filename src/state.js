@@ -20,7 +20,7 @@ export const openModal = atom({
 })
 
 const exampleNote = {
-  author: 'Yarden Hochman', content: 'testing notes list', date: new Date(), id: uuidv4()
+  author: 'Yarden Hochman', content: 'example of a note', date: new Date(), id: uuidv4()
 }
 
 export const noteListState = atom({

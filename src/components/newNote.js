@@ -28,7 +28,7 @@ const NewNote = () => {
       addNote({ content, author, date: new Date(), id: uuidv4() });
     } else {
       const newNoteList = [...noteList]
-      newNoteList[currentNote.index] = { ...currentNote, content}
+      newNoteList[currentNote.index] = { ...currentNote, content, author}
       setNoteList(newNoteList)
     }
     setModalOpen(false);
