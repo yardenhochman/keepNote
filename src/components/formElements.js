@@ -4,11 +4,12 @@ import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
 
 export const Form = ({ children, onSubmit, defaultValues, ...props }) => {
-  const methods = useForm({defaultValues});
+  const methods = useForm({defaultValues, criteriaMode: 'all'});
 
   const submit = (formData, e) => {
     e.preventDefault();
     onSubmit(formData, e);
+    // console.log(formData)
   };
 
   return (
@@ -18,8 +19,12 @@ export const Form = ({ children, onSubmit, defaultValues, ...props }) => {
   )
 }
 
-export const InputText = ({required, innerRef, ...props}) => {
-  const { register } = useFormContext()
+const validation = formValues => ({
+  verify_password: value => value !== formValues?.password ? "passwords do not match" : null
+})
+
+export const InputText = ({ required, innerRef, ...props }) => {
+  const { register, getValues } = useFormContext()
 
   return (
     <InputArea>
@@ -28,13 +33,16 @@ export const InputText = ({required, innerRef, ...props}) => {
       label={props.label ?? props.name}
         {...props} 
         inputRef={e=>{
-          register({ required })(e)
+          register({ 
+            required: required ? `Please fill in the ${props.name} field` : null, 
+            validate: validation(getValues())?.[props.name] })(e)
           if (innerRef) {
             innerRef.current = e
           }
         }
         } 
       />
+      <Error name={props.name}/>
     </InputArea>
   )
 }
@@ -54,13 +62,27 @@ const InputArea = styled.div`
 
 const ErrorMessage = styled.span`
   color: red;
+  span {
+    text-transform: capitalize;
+  }
 `
 
-export const Error = ({type, message}) => {
+export const Error = ({ name='content' }) => {
   const { errors } = useFormContext()
 
-    if (errors?.content?.type === type ) {
-    return <ErrorMessage>{message}</ErrorMessage>
-    }
-    return null
+  if (!errors?.[name]) return null
+  return (
+  <ErrorMessage>
+    <span>
+      {errors?.[name]?.message?.replaceAll(/_/g, " ")}
+    </span>
+  </ErrorMessage>)
+  
+
   }
+
+export const Errors = () => {
+  const { errors } = useFormContext()
+  console.log(errors)
+  return <ErrorMessage errors={errors} name="verify_password" render={({ message }) => <p>{message}</p>} />
+}

@@ -3,7 +3,6 @@ import styled, { css } from 'styled-components'
 import Switch from '@material-ui/core/Switch';
 
 const LabeledSwitch = ({ optionA, optionB, checked, ...props }) => {
-  console.log(!checked)
   return (
   <SwitchArea>
     <Label isActive={!checked}>{optionA}</Label>
@@ -17,7 +16,7 @@ export default LabeledSwitch
 const SwitchArea = styled.div`
   display: flex;
   .MuiSwitch-track {
-    background-color: green;
+    background-color: #3f51b5;
   }
 
 `
