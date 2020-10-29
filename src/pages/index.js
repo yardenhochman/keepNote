@@ -1,7 +1,6 @@
 import React from 'react'
 import { useRecoilValue, useRecoilState } from 'recoil';
-import { useFillNotesFromStorage } from '../utils/hooks'
-import { noteListState, userState, usePersistenceObserver } from '../state'
+import { noteListState, userState, usePersistenceObserver, useFillNotesFromStorage } from '../state'
 import NotesList from '../components/notesList'
 import NewNote from '../components/newNote';
 import Modal from '../components/Modal'

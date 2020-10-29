@@ -2,11 +2,12 @@ import {
   atom,
   selector,
   useRecoilTransactionObserver_UNSTABLE,
-  useRecoilValue
+  useRecoilValue,
+  useRecoilState
 } from 'recoil';
 import { v4 as uuidv4 } from 'uuid';
 import { sortByDate } from './utils/dateUtils'
-
+import React from 'react'
 
 export const selectedNote = atom({
   key: 'selectedNote',
@@ -59,7 +60,6 @@ export const getSortedNoteList = selector({
 
 export const usePersistenceObserver = () => {
   const user = useRecoilValue(userState);
-  console.log(user?.id)
   useRecoilTransactionObserver_UNSTABLE(({snapshot}) => {
 
     for (const modifiedAtom of snapshot.getNodes_UNSTABLE({isModified: true})) {
@@ -78,3 +78,14 @@ export const usePersistenceObserver = () => {
   });
 }
 
+export const useFillNotesFromStorage = () => {
+  const setNoteList = useRecoilState(noteListState)[1];
+  const user = useRecoilValue(userState);
+
+  React.useEffect(()=>{
+    const unparsedItem = localStorage.getItem('noteListState');
+    if (unparsedItem) {
+      setNoteList(JSON.parse(unparsedItem)[user?.id] || [])
+    }
+  },[setNoteList, user?.id])
+}

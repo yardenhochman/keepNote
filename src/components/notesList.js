@@ -34,7 +34,7 @@ const NotesList = () => {
 
   return (
     <ListOfNotes>
-          <NewNoteButon onClick={()=>setModalOpen(true)}>New Note</NewNoteButon>
+      <NewNoteButon onClick={()=>setModalOpen(true)}>New Note</NewNoteButon>
       {noteList.map(note=>(
         <NoteCard key={note.content+note.date} variant="outlined" onClick={onNoteClick(note)}>
           <ActionArea>
@@ -44,12 +44,11 @@ const NotesList = () => {
             <TruncateTooltip lines={2} title={note.content}>
               <NoteText >{note.content}</NoteText>
             </TruncateTooltip>
-
           </Content>
-        <InfoArea>
-          <Author>{note.author}</Author>
-          <DateText>{dateDisplay(note.date)}</DateText>
-        </InfoArea>
+          <InfoArea>
+            <Author>{note.author}</Author>
+            <DateText>{dateDisplay(note.date)}</DateText>
+          </InfoArea>
         </NoteCard>
       ))}
     </ListOfNotes>

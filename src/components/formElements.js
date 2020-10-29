@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import validation from './validation'
 
 export const Form = ({ children, onSubmit, defaultValues, ...props }) => {
-  const methods = useForm({defaultValues, criteriaMode: 'all', reValidateMode: 'onBlur'});
+  const methods = useForm({ defaultValues, criteriaMode: 'all', reValidateMode: 'onBlur' });
 
   const submit = (formData, e) => {
     e.preventDefault();
@@ -81,10 +81,7 @@ export const Error = ({ name='content' }) => {
   if (!errors?.[name]) return null
   return (
   <ErrorMessage>
-    <span>
       {errors?.[name]?.message?.replaceAll(/_/g, " ")}
-    </span>
-  </ErrorMessage>)
-  
-
-  }
+  </ErrorMessage>
+  )
+}
