@@ -30,7 +30,7 @@ export const noteListState = atom({
 
 export const userState = atom({
   key: 'user',
-  default: {}
+  default: JSON.parse(localStorage.getItem('user')) || false
 })
 
 export const userName = selector({
@@ -64,11 +64,10 @@ export const usePersistenceObserver = () => {
 
     for (const modifiedAtom of snapshot.getNodes_UNSTABLE({isModified: true})) {
       const atomLoadable = snapshot.getLoadable(modifiedAtom);
-      if (atomLoadable.state === 'hasValue' && user?.id) {
+      if (atomLoadable.state === 'hasValue' && user?.id && modifiedAtom.key !== 'user') {
         
         const allUsersData = JSON.parse(localStorage.getItem(modifiedAtom.key)) || {}
         allUsersData[user.id] = atomLoadable.contents
-        modifiedAtom.key === 'noteListState' && console.log(allUsersData)
         localStorage.setItem(
           modifiedAtom.key,
           JSON.stringify(allUsersData),
@@ -81,6 +80,10 @@ export const usePersistenceObserver = () => {
 export const useFillNotesFromStorage = () => {
   const setNoteList = useRecoilState(noteListState)[1];
   const user = useRecoilValue(userState);
+
+  React.useEffect(()=>{
+    localStorage.setItem('user', JSON.stringify(user));
+  },[user])
 
   React.useEffect(()=>{
     const unparsedItem = localStorage.getItem('noteListState');

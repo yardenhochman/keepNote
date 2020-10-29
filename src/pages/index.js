@@ -12,11 +12,13 @@ import Button from '@material-ui/core/Button';
   const MainPage = () => {
     const noteList = useRecoilValue(noteListState);
     const [user, setUser] = useRecoilState(userState)
-
+    
     usePersistenceObserver()
     useFillNotesFromStorage()
 
-    if (!user?.name) return <Auth />
+    if (!user) {
+      return <Auth />
+    }
 
 
   return (
@@ -39,4 +41,3 @@ const NotesPage = styled(Page)`
     align-self: flex-end;
   }
 `
-

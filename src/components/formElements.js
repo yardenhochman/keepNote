@@ -23,11 +23,6 @@ export const Form = ({ children, onSubmit, defaultValues, ...props }) => {
 
 export const InputText = ({ required, innerRef, isLogin, skipVerification = false,...props }) => {
   const { register, getValues } = useFormContext()
-  if (props.type === 'password') {
-    console.log(skipVerification)
-  }
-
-
 
   return (
     <InputArea>
