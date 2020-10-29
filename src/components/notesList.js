@@ -82,6 +82,9 @@ const NoteCard = styled.div`
   width: 300px;
   cursor: pointer;
   margin: 25px 15px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `
 const InfoArea = styled.div`
   display: flex;

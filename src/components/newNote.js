@@ -3,12 +3,13 @@ import styled from 'styled-components';
 import { Form, InputText, Error } from './formElements';
 import Button from '@material-ui/core/Button';
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { noteListState, userName, openModal, selectedNote, getNoteListById } from '../state'
+import { noteListState, openModal, selectedNote, getNoteListById } from '../state'
 import { v4 as uuidv4 } from 'uuid';
+import { useFocusElement } from '../utils/hooks'
 
 const NewNote = () => {
 
-  const inputRef = React.useRef()
+  const focusOnLoad = useFocusElement()
 
   const [noteList, setNoteList] = useRecoilState(noteListState);
   const [noteId, setSelectedNote] = useRecoilState(selectedNote);
@@ -22,11 +23,9 @@ const NewNote = () => {
     newNoteList.push(note)
     setNoteList(newNoteList)
   }
-  const currentUserName = useRecoilValue(userName)
-
-  const onSubmit = ({ content }) => {
+  const onSubmit = ({ content, author }) => {
     if (!noteId) {
-      addNote({ content, author: currentUserName, date: new Date(), id: uuidv4() });
+      addNote({ content, author, date: new Date(), id: uuidv4() });
     } else {
       const newNoteList = [...noteList]
       newNoteList[currentNote.index] = { ...currentNote, content}
@@ -36,7 +35,6 @@ const NewNote = () => {
   }
 
   React.useEffect(()=>{
-    inputRef.current?.focus()
     return ()=>{
       setSelectedNote(false)
     }
@@ -44,7 +42,7 @@ const NewNote = () => {
 
   return (
       <CardForm onSubmit={onSubmit} defaultValues={currentNote}>
-        <InputText label='What would you like to say?' name='content' required autocomplete="off" innerRef={inputRef}/>
+        <InputText label='What would you like to say?' name='content' required autocomplete="off" innerRef={focusOnLoad}/>
         <InputText label='Author Name' name='author' required autocomplete="off" />
         <div>
           <CancelButton onClick={()=>setModalOpen(false)}>Cancel</CancelButton>
