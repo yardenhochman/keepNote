@@ -18,10 +18,8 @@ const AuthPage = () => {
 
     if (!isLogin) {
       registerUser(username, password)
-      console.log('user registered')
     }
     setUser(getUser(username))
-    console.log('login success')
 
   }
   return (
