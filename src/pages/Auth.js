@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Form, InputText, Errors } from '../components/formElements'
+import { Form, InputText } from '../components/formElements'
 import Switch from '../components/switch';
 import { Page } from './styles'
 import Button from '@material-ui/core/Button';
@@ -27,6 +27,11 @@ const LoginPage = () => {
 
   const submitFields = (fieldsData) => {
     console.log(fieldsData)
+    if (!isLogin) {
+      registerUser(fieldsData.username, fieldsData.password)
+      console.log('user registered')
+    }
+    console.log('login success')
 
   }
 
@@ -41,8 +46,8 @@ const LoginPage = () => {
       onChange={()=>setIsLogin(state=>!state)}
      />
       <Form onSubmit={submitFields}>
-        <InputText name='username' required />
-        <InputText name='password' type='password' required />
+        <InputText name='username' required skipVerification={isLogin}/>
+        <InputText name='password' type='password' required skipVerification={!isLogin}/>
         {!isLogin && <InputText label="Verify Password" name='verify_password' type='password' required />}
         <SubmitButton isLogin={isLogin}>Submit</SubmitButton>
       </Form>

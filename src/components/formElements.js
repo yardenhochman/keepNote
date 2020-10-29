@@ -3,8 +3,19 @@ import { useForm, FormProvider, useFormContext } from "react-hook-form";
 import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
 
+const isUsernameTaken = username => {
+  const user = localStorage.getItem(username);
+  return !!user
+}
+
+const isLoginCorrect = (username, password) => {
+  const user = localStorage.getItem(username);
+  if (!user) return false;
+  return JSON.parse(user).password === password;
+}
+
 export const Form = ({ children, onSubmit, defaultValues, ...props }) => {
-  const methods = useForm({defaultValues, criteriaMode: 'all'});
+  const methods = useForm({defaultValues, criteriaMode: 'all', reValidateMode: 'onBlur'});
 
   const submit = (formData, e) => {
     e.preventDefault();
@@ -19,13 +30,14 @@ export const Form = ({ children, onSubmit, defaultValues, ...props }) => {
   )
 }
 
-const validation = formValues => ({
-  verify_password: value => value !== formValues?.password ? "passwords do not match" : null
+const validation = (formValues, skip) => ({
+  verify_password: value => value === formValues?.password ? null : "passwords do not match",
+  username: value => skip || !isUsernameTaken(value) ? null : "name is taken",
+  password: value => skip || isLoginCorrect(formValues?.username, value) ? null : "wrong details"
 })
 
-export const InputText = ({ required, innerRef, ...props }) => {
+export const InputText = ({ required, innerRef, isLogin, skipVerification,...props }) => {
   const { register, getValues } = useFormContext()
-
   return (
     <InputArea>
       <TextField
@@ -35,7 +47,7 @@ export const InputText = ({ required, innerRef, ...props }) => {
         inputRef={e=>{
           register({ 
             required: required ? `Please fill in the ${props.name} field` : null, 
-            validate: validation(getValues())?.[props.name] })(e)
+            validate: validation(getValues(), skipVerification)?.[props.name] })(e)
           if (innerRef) {
             innerRef.current = e
           }
@@ -62,9 +74,6 @@ const InputArea = styled.div`
 
 const ErrorMessage = styled.span`
   color: red;
-  span {
-    text-transform: capitalize;
-  }
 `
 
 export const Error = ({ name='content' }) => {
