@@ -33,10 +33,7 @@ export const userState = atom({
 
 export const userName = selector({
   key: 'userName',
-  get: ({ get }) => {
-    const user = get(userState);
-    return user?.name
-  }
+  get: ({ get }) => get(userState)?.name
 })
 
 export const getNoteListById = selector({

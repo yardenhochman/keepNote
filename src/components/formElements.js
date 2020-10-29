@@ -2,17 +2,7 @@ import React from 'react'
 import { useForm, FormProvider, useFormContext } from "react-hook-form";
 import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
-
-const isUsernameTaken = username => {
-  const user = localStorage.getItem(username);
-  return !!user
-}
-
-const isLoginCorrect = (username, password) => {
-  const user = localStorage.getItem(username);
-  if (!user) return false;
-  return JSON.parse(user).password === password;
-}
+import validation from './validation'
 
 export const Form = ({ children, onSubmit, defaultValues, ...props }) => {
   const methods = useForm({defaultValues, criteriaMode: 'all', reValidateMode: 'onBlur'});
@@ -20,7 +10,6 @@ export const Form = ({ children, onSubmit, defaultValues, ...props }) => {
   const submit = (formData, e) => {
     e.preventDefault();
     onSubmit(formData, e);
-    // console.log(formData)
   };
 
   return (
@@ -30,14 +19,13 @@ export const Form = ({ children, onSubmit, defaultValues, ...props }) => {
   )
 }
 
-const validation = (formValues, skip) => ({
-  verify_password: value => value === formValues?.password ? null : "passwords do not match",
-  username: value => skip || !isUsernameTaken(value) ? null : "name is taken",
-  password: value => skip || isLoginCorrect(formValues?.username, value) ? null : "wrong details"
-})
+
 
 export const InputText = ({ required, innerRef, isLogin, skipVerification,...props }) => {
   const { register, getValues } = useFormContext()
+  if (props.type === 'password') {
+    console.log(skipVerification)
+  }
   return (
     <InputArea>
       <TextField
@@ -47,7 +35,9 @@ export const InputText = ({ required, innerRef, isLogin, skipVerification,...pro
         inputRef={e=>{
           register({ 
             required: required ? `Please fill in the ${props.name} field` : null, 
-            validate: validation(getValues(), skipVerification)?.[props.name] })(e)
+            validate: value => 
+            validation(getValues(), skipVerification)?.[props.name](value)
+            })(e)
           if (innerRef) {
             innerRef.current = e
           }

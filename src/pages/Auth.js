@@ -4,40 +4,28 @@ import { Form, InputText } from '../components/formElements'
 import Switch from '../components/switch';
 import { Page } from './styles'
 import Button from '@material-ui/core/Button';
-import { v4 as uuidv4 } from 'uuid';
+import { useRecoilState } from 'recoil';
+import { userState } from '../state'
+import { registerUser, getUser } from '../api'
 
-const isUsernameTaken = username => {
-  const user = localStorage.getItem(username);
-  return !!user
-}
 
-const checkLogin = (username, password) => {
-  const user = localStorage.getItem(username);
-  if (!user) return false;
-  return JSON.parse(user).password === password;
-}
-
-const registerUser = (username,password) => {
-  localStorage.setItem(username, JSON.stringify({ name: username, password, id: uuidv4() }))
-}
-
-const LoginPage = () => {
+const AuthPage = () => {
 
   const [isLogin, setIsLogin] = React.useState(true);
 
-  const submitFields = (fieldsData) => {
-    console.log(fieldsData)
+  const setUser = useRecoilState(userState)[1]
+  const submitFields = ({ username, password }) => {
+
     if (!isLogin) {
-      registerUser(fieldsData.username, fieldsData.password)
+      registerUser(username, password)
       console.log('user registered')
     }
+    setUser(getUser(username))
     console.log('login success')
 
   }
-
-
   return (
-    <AuthPage>
+    <AuthPageWrapper>
     <Switch 
       optionA="Login"   
       optionB="Register"
@@ -51,16 +39,16 @@ const LoginPage = () => {
         {!isLogin && <InputText label="Verify Password" name='verify_password' type='password' required />}
         <SubmitButton isLogin={isLogin}>Submit</SubmitButton>
       </Form>
-    </AuthPage>
+    </AuthPageWrapper>
   )
 }
 
-export default LoginPage
+export default AuthPage
 
 
 
 
-const AuthPage = styled(Page)`
+const AuthPageWrapper = styled(Page)`
     padding-top: 30vh;
 `
 

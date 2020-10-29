@@ -1,5 +1,5 @@
 import React from 'react'
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import { useFillNotesFromStorage } from '../utils/hooks'
 import { noteListState, userState, PersistenceObserver } from '../state'
 import NotesList from '../components/notesList'
@@ -8,10 +8,12 @@ import Modal from '../components/Modal'
 import styled from 'styled-components'
 import Auth from './Auth'
 import { Page } from './styles'
+import Button from '@material-ui/core/Button';
 
   const MainPage = () => {
     const noteList = useRecoilValue(noteListState);
-    const user = useRecoilValue(userState)
+    const [user, setUser] = useRecoilState(userState)
+
     PersistenceObserver()
     useFillNotesFromStorage()
 
@@ -20,6 +22,7 @@ import { Page } from './styles'
 
   return (
     <NotesPage>
+      <Button onClick={()=> setUser(null)}>logout</Button>
       <NotesList noteList={noteList} />
       <Modal>
         <NewNote />
@@ -34,6 +37,7 @@ export default MainPage;
 const NotesPage = styled(Page)`
   & > button {
     width: 300px;
+    align-self: flex-end;
   }
 `
 
