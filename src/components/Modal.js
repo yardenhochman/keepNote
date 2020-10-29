@@ -9,11 +9,8 @@ const Modal = ({ children, onClose }) => {
 
   return (
     <ModalMUI open={open} onClose={()=>setModalOpen(false)}>
-    <ModalWrapper>
-    {children}
-    </ModalWrapper>
-  </ModalMUI>
-
+      <ModalWrapper>{children}</ModalWrapper>
+    </ModalMUI>
   )
 }
 

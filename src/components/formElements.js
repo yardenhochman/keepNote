@@ -1,7 +1,7 @@
 import React from 'react'
 import { useForm, FormProvider, useFormContext } from "react-hook-form";
 import styled from 'styled-components';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
+import TextField from '@material-ui/core/TextField';
 
 export const Form = ({ children, onSubmit, defaultValues, ...props }) => {
   const methods = useForm({defaultValues});
@@ -23,8 +23,9 @@ export const InputText = ({required, innerRef, ...props}) => {
 
   return (
     <InputArea>
-      <label>{props.name}</label>
-      <OutlinedInput 
+      <TextField
+      variant="outlined"  
+      label={props.label ?? props.name}
         {...props} 
         inputRef={e=>{
           register({ required })(e)
@@ -41,9 +42,11 @@ export const InputText = ({required, innerRef, ...props}) => {
 const InputArea = styled.div`
   display: flex;
   flex-direction: column;
+  margin-bottom: 20px;
   label {
     text-transform: capitalize;
     font-weight: bold;
+    margin-bottom: 15px;
   }
 
 `

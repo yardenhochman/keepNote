@@ -44,9 +44,12 @@ const NewNote = () => {
 
   return (
       <CardForm onSubmit={onSubmit} defaultValues={currentNote}>
-        <InputText name='content' required autocomplete="off" innerRef={inputRef}/>
-        <InputText name='author' required autocomplete="off" />
-        <SaveButton>Save</SaveButton>
+        <InputText label='What would you like to say?' name='content' required autocomplete="off" innerRef={inputRef}/>
+        <InputText label='Author Name' name='author' required autocomplete="off" />
+        <div>
+          <CancelButton onClick={()=>setModalOpen(false)}>Cancel</CancelButton>
+          <SaveButton>Save</SaveButton>
+        </div>
         <Error type='required' message='cannot save empty note' />
       </CardForm>
   )
@@ -64,11 +67,19 @@ const CardForm = styled(Form)`
   background-color: #fff;
   display: flex;
   flex-direction: column;
-`
 
-const SaveButton = styled(Button).attrs({
+  & > div {
+    display: flex;
+    justify-content: flex-end;
+  }
+`
+const CancelButton = styled(Button).attrs({
   variant: 'outlined',
-  type: 'submit'
 })`
   margin-top: 10px;
+  margin-right: 5px;
 `
+
+const SaveButton = styled(CancelButton).attrs({
+  type: 'submit'
+})``
