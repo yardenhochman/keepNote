@@ -21,12 +21,32 @@ export const Form = ({ children, onSubmit, defaultValues, ...props }) => {
 export const InputText = ({required, innerRef, ...props}) => {
   const { register } = useFormContext()
 
-  return <OutlinedInput {...props} inputRef={e=>{
-    
-    register({ required })(e)
-    innerRef.current = e
-    }} />
+  return (
+    <InputArea>
+      <label>{props.name}</label>
+      <OutlinedInput 
+        {...props} 
+        inputRef={e=>{
+          register({ required })(e)
+          if (innerRef) {
+            innerRef.current = e
+          }
+        }
+        } 
+      />
+    </InputArea>
+  )
 }
+
+const InputArea = styled.div`
+  display: flex;
+  flex-direction: column;
+  label {
+    text-transform: capitalize;
+    font-weight: bold;
+  }
+
+`
 
 
 const ErrorMessage = styled.span`

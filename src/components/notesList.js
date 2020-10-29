@@ -4,15 +4,16 @@ import IconButton from './iconButton';
 import styled from 'styled-components';
 import { dateDisplay } from '../utils/dateUtils';
 import {useRecoilState, useRecoilValue} from 'recoil';
-import { selectedNote, openModal, getNoteListById, noteListState } from '../state'
+import { selectedNote, openModal, getNoteListById, noteListState, getSortedNoteList } from '../state'
 import TruncateTooltip from './truncateTooltip'
-import { sortByDate } from '../utils/dateUtils'
+import Button from '@material-ui/core/Button';
 
 const NotesList = () => {
   const setSelectedNote = useRecoilState(selectedNote)[1];
-  const [noteList, setNoteList] = useRecoilState(noteListState);
+  const setNoteList = useRecoilState(noteListState)[1];
   const setModalOpen = useRecoilState(openModal)[1];
   const noteListById = useRecoilValue(getNoteListById)
+  const noteList = useRecoilValue(getSortedNoteList)
 
   const onNoteClick = note => e => {
     e.preventDefault()
@@ -25,16 +26,16 @@ const NotesList = () => {
     e.stopPropagation()
     const noteIndex = noteListById[note.id]?.index ?? false
     if (noteIndex !== false) {
-      const newNoteList = [...noteList]
-      newNoteList.splice(noteIndex,1)
+      const newNoteList = 
+      [...noteList].splice(noteIndex,1)
       setNoteList(newNoteList)
     }
   }
-  const newNoteList = [...noteList]
 
   return (
     <ListOfNotes>
-      {newNoteList.sort(sortByDate).map(note=>(
+          <NewNoteButon onClick={()=>setModalOpen(true)}>New Note</NewNoteButon>
+      {noteList.map(note=>(
         <NoteCard key={note.content+note.date} variant="outlined" onClick={onNoteClick(note)}>
           <ActionArea>
             <IconButton icon={<DeleteIcon />} actionText='delete' onClick={deleteNote(note)}/>
@@ -80,7 +81,7 @@ const NoteCard = styled.div`
   background-color: #fff;
   width: 300px;
   cursor: pointer;
-  margin: 5px 5px 0;
+  margin: 25px 15px 0;
 `
 const InfoArea = styled.div`
   display: flex;
@@ -112,4 +113,12 @@ const NoteText = styled.p`
 
 const Author = styled.span`
   text-transform: capitalize;
+`
+
+const NewNoteButon = styled(Button).attrs(({
+  variant: 'outlined'
+}))`
+  width: 300px;
+  margin: 25px 15px 0;
+
 `

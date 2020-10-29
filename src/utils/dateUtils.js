@@ -6,5 +6,4 @@ export const dateDisplay = dateObj => {
 }
 
 
-export const sortByDate = (a, b) => {
-  return new Date(a.date) - new Date(b.date);}
+export const sortByDate = (a, b) => new Date(a.date) - new Date(b.date);

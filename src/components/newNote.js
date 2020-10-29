@@ -45,6 +45,7 @@ const NewNote = () => {
   return (
       <CardForm onSubmit={onSubmit} defaultValues={currentNote}>
         <InputText name='content' required autocomplete="off" innerRef={inputRef}/>
+        <InputText name='author' required autocomplete="off" />
         <SaveButton>Save</SaveButton>
         <Error type='required' message='cannot save empty note' />
       </CardForm>
