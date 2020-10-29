@@ -64,10 +64,14 @@ export const usePersistenceObserver = () => {
 
     for (const modifiedAtom of snapshot.getNodes_UNSTABLE({isModified: true})) {
       const atomLoadable = snapshot.getLoadable(modifiedAtom);
-      if (atomLoadable.state === 'hasValue') {
+      if (atomLoadable.state === 'hasValue' && user?.id) {
+        
+        const allUsersData = JSON.parse(localStorage.getItem(modifiedAtom.key)) || {}
+        allUsersData[user.id] = atomLoadable.contents
+        modifiedAtom.key === 'noteListState' && console.log(allUsersData)
         localStorage.setItem(
           modifiedAtom.key,
-          JSON.stringify(atomLoadable.contents),
+          JSON.stringify(allUsersData),
         );
       }
     }
